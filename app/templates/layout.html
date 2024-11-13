@@ -1,0 +1,42 @@
+<!-- templates/layout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chatabook{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{url_for('main.home')}}">Domov</a>
+            {% if current_user.is_authenticated %}
+            <h3> Ahoj, {{ current_user.name }}!</h3>
+            <a href="{{url_for('main.logout')}}">Odhlásiť sa</a>
+            {% else %}
+            <a href="{{url_for('main.login')}}">Prihlásiť sa</a>
+            <a href="{{url_for('main.register')}}">Registrovať sa</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{message}}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
