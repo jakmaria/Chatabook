@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, logout_user
-from .models import db, User
+from flask_login import current_user, login_user, logout_user, login_required
+from .models import db, User, Booking, EventType
 
 # Define a blueprint for routes, keeping everything modular
 bp = Blueprint('main', __name__)
@@ -59,3 +59,33 @@ def logout():
     logout_user()
     flash('Boli ste úspešne odhlásený!', 'info')
     return redirect(url_for('main.login'))
+
+@bp.route('/booking', methods=['GET', 'POST'])
+@login_required
+def booking():
+    if request.method == 'POST':
+        user_id = current_user.id
+        date_from = request.form.get('date_from')
+        date_to = request.form.get('date_to')
+
+        event_type_id = request.form.get('event_type_id', 1)
+        whole_cottage = request.form.get('whole_cottage', True) 
+        comment = request.form.get('comment')
+
+        event_types = EventType.query.all()
+        
+        booking = Booking(
+            user_id = user_id, 
+            date_from = date_from,
+            date_to = date_to,
+            event_type_id = event_type_id,
+            whole_cottage = whole_cottage,
+            comment = comment
+        )
+        db.session.add(booking)
+        db.session.commit()
+
+        flash('Rezervácia bola úspešne vytvorená!', 'success')
+        return redirect(url_for('main.home'))
+    event_types = EventType.query.all()
+    return render_template('booking.html',event_types=event_types)

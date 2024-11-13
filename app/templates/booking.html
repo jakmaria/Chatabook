@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Create Booking - Chatabook{% endblock %}
+
+{% block content %}
+<h1>Vytvoriť rezerváciu</h1>
+<form method="POST" action="{{ url_for('main.booking') }}">
+    <label for="date_from">Od:</label>
+    <input type="text" id="date_from" name="date_from" required>
+
+    <label for="date_to">Do:</label>
+    <input type="text" id="date_to" name="date_to" required>
+
+    <label for="event_type_id">Udalosť:</label>
+    <select id="event_type_id" name="event_type_id">
+        {% for event in event_types %}
+            <option value="{{ event.id }}">{{ event.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Rezervovať</button>
+</form>
+{% endblock %}
