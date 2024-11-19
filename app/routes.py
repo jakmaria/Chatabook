@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app.utils import role_required
-from .models import db, User, Booking, EventType
+from .models import db, User, Booking, EventType, Role
 from datetime import datetime, date, timedelta
 import json
 
@@ -11,6 +11,9 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/')
 def home():
+    if not current_user.is_authenticated:
+        return render_template('landing_page.html')
+    
     today = date.today() 
     bookings = Booking.query.filter(Booking.date_to >= today).order_by(Booking.date_from).all()
     events = [
@@ -115,7 +118,7 @@ def booking():
         flash('Rezervácia bola úspešne vytvorená!', 'success')
         return redirect(url_for('main.home'))
     event_types = EventType.query.all()
-    return render_template('booking.html',event_types=event_types)
+    return render_template('booking.html',event_types=event_types, users=users)
 
 
 @bp.route('/manage-users', methods=['GET'])
@@ -129,9 +132,10 @@ def manage_users():
 def edit_booking(booking_id):
     booking = Booking.query.get_or_404(booking_id)
 
-   
     if booking.user_id != current_user.id and current_user.role_id > 1:
         abort(403)  # Forbidden
+
+    event_types = EventType.query.all()
 
     if request.method == 'POST':
 
@@ -143,7 +147,7 @@ def edit_booking(booking_id):
         flash("Rezervácia bola úspešne upravená!", "success")
         return redirect(url_for('main.home'))
 
-    return render_template('edit_booking.html', booking=booking)
+    return render_template('edit_booking.html', booking=booking,event_types=event_types)
 
 @bp.route('/delete-booking/<int:booking_id>', methods=['POST'])
 @role_required(2)  

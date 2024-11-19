@@ -1,0 +1,30 @@
+<!-- templates/landing_page.html -->
+{% extends "layout.html" %}
+
+{% block title %}Chatabook - Domov{% endblock %}
+
+{% block content %}
+<div >
+    <h1>Vitajte na Chatabook!</h1>
+    <p>
+        Chatabook je jednoduchý rezervačný systém pre našu rodinnú chatu. 
+        Tento systém umožňuje:
+    </p>
+    <ul>
+        <li>Rýchlu rezerváciu termínov.</li>
+        <li>Zobrazenie obsadenosti chaty v kalendári.</li>
+        <li>Správu rezervácií pre užívateľov a adminov.</li>
+        <li>Transparentnú a organizovanú komunikáciu medzi členmi rodiny.</li>
+    </ul>
+
+    <h2>Čo ponúkame?</h2>
+    <p>
+        Systém je navrhnutý tak, aby zjednodušil správu rezervácií a poskytol prehľad o aktuálnom stave obsadenosti chaty.
+    </p>
+    <h2>Začnite teraz!</h2>
+    <div>
+        <a href="{{ url_for('main.register') }}" >Registrovať sa</a>
+        <a href="{{ url_for('main.login') }}" >Prihlásiť sa</a>
+    </div>
+</div>
+{% endblock %}
