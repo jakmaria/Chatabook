@@ -5,6 +5,17 @@
 {% block content %}
 <h1>Vytvoriť rezerváciu</h1>
 <form method="POST" action="{{ url_for('main.booking') }}">
+    {% if current_user.role_id == 1 %}
+    <label for="user_id">Užívateľ:</label>
+    <select id="user_id" name="user_id">
+        {% for user in users %}
+        <option value="{{ user.id }}" {% if user.id == current_user.id %}selected{% endif %}>
+            {{ user.name }} {{ user.surname }}
+        </option>
+        {% endfor %}
+    </select>
+    {% endif %}
+    
     <label for="date_from">Od:</label>
     <input type="text" id="date_from" name="date_from" required>
 

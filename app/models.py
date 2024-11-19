@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -21,6 +22,12 @@ class User(UserMixin,db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable = False)
     role = db.relationship('Role', backref='users')
     password_hash = db.Column(db.String(128), nullable=False)
+
+    bookings = db.relationship(
+        'Booking',
+        backref='user',
+        cascade="all, delete-orphan"
+    )
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -45,5 +52,4 @@ class Booking(db.Model):
     status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default = db.func.current_timestamp())
 
-    user = db.relationship('User', backref = 'bookings')
     event_type = db.relationship('EventType', backref='bookings')
