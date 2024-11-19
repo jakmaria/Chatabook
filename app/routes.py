@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 from .models import db, User, Booking, EventType
+from datetime import datetime
 
 # Define a blueprint for routes, keeping everything modular
 bp = Blueprint('main', __name__)
@@ -65,8 +66,8 @@ def logout():
 def booking():
     if request.method == 'POST':
         user_id = current_user.id
-        date_from = request.form.get('date_from')
-        date_to = request.form.get('date_to')
+        date_from = datetime.strptime(request.form.get('date_from'), "%Y-%m-%d").date()
+        date_to = datetime.strptime(request.form.get('date_to'), "%Y-%m-%d").date()
 
         event_type_id = request.form.get('event_type_id', 1)
         whole_cottage = request.form.get('whole_cottage', True) 

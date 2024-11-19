@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Chatabook{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <header>
         <nav>
             <a href="{{url_for('main.home')}}">Domov</a>
             {% if current_user.is_authenticated %}
-            <h3> Ahoj, {{ current_user.name }}!</h3>
             <a href="{{url_for('main.logout')}}">Odhlásiť sa</a>
+            <h3> Ahoj, {{ current_user.name }}!</h3>
             {% else %}
             <a href="{{url_for('main.login')}}">Prihlásiť sa</a>
             <a href="{{url_for('main.register')}}">Registrovať sa</a>

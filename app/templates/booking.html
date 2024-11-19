@@ -20,4 +20,17 @@
 
     <button type="submit">Rezervovať</button>
 </form>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#date_from", {
+            dateFormat: "Y-m-d", 
+            minDate: "today"
+        });
+        flatpickr("#date_to", {
+            dateFormat: "Y-m-d", 
+            minDate: "today"
+        });
+    });
+</script>
+
 {% endblock %}
