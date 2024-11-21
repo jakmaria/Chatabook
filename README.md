@@ -20,7 +20,6 @@ Chatabook leverages modern web development technologies:
 **Flask-Login:** Streamlines session management and user authentication.
 
 
-
 ---
 
 ## Features

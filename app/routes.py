@@ -14,6 +14,7 @@ def home():
     if not current_user.is_authenticated:
         return render_template('landing_page.html')
     
+    #Calendar display was implemented with the help of ChatGPT
     today = date.today() 
     bookings = Booking.query.filter(Booking.date_to >= today).order_by(Booking.date_from).all()
     events = [
