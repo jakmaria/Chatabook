@@ -1,0 +1,28 @@
+# Ignore the virtual environment folder
+venv/
+
+
+# Node.js dependencies
+node_modules/
+
+# Tailwind CSS build artifacts
+app/static/styles.css
+app/static/styles.css.map
+
+# Python-specific files
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Environment variables
+.env
+*.env
+
+# IDE settings (optional, depending on your IDE)
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

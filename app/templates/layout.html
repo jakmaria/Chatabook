@@ -1,0 +1,63 @@
+<!-- templates/layout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chatabook{% endblock %}</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{url_for('main.home')}}">Domov</a>
+            {% if current_user.is_authenticated %}
+            <span>{{ current_user.role.name }}</span>
+            <a href="{{url_for('main.logout')}}">Odhlásiť sa</a>
+            <h3> Ahoj, {{ current_user.name }}!</h3>
+                {% if current_user.role_id ==1 %}
+                <a href="{{url_for('main.manage_users')}}">Spravovať użívateľov</a>
+                {% endif %}
+            {% else %}
+            <a href="{{url_for('main.login')}}">Prihlásiť sa</a>
+            <a href="{{url_for('main.register')}}">Registrovať sa</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{message}}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main>
+        {% block content %}
+        {% if current_user.is_authenticated %}
+            {% if current_user.role_id == 1 %}
+                <p>Ahoj, {{ current_user.name }}, tvoja rola je Admin! Máš plný prístup na správu užívateľov, rezervácií a zobrazenie všetkých rezervácií.</p>
+            {% elif current_user.role_id == 2 %}
+                <p>Ahoj, {{ current_user.name }}, tvoja rola je Užívateľ! Môžeš vytvárať, upravovať a mazať svoje vlastné rezervácie, a zobraziť všetky existujúce rezervácie.</p>
+            {% elif current_user.role_id == 3 %}
+                <p>Ahoj, {{ current_user.name }}, tvoja rola je Hosť! Máš právo len na zobrazenie existujúcich rezervácií.</p>
+            {% else %}
+                <p>Ahoj, {{ current_user.name }}, tvoja rola je Návštevník! Máš len obmedzený prístup.</p>
+            {% endif %}
+        {% else %}
+            <p>Prosím, prihláste sa, aby ste mohli zobraziť obsah.</p>
+        {% endif %}
+    {% endblock %}
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
