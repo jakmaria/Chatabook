@@ -1,63 +1,83 @@
-<!-- templates/layout.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Chatabook{% endblock %}</title>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.5/locales-all.global.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/calendar.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="{{url_for('main.home')}}">Domov</a>
-            {% if current_user.is_authenticated %}
-            <span>{{ current_user.role.name }}</span>
-            <a href="{{url_for('main.logout')}}">Odhlásiť sa</a>
-            <h3> Ahoj, {{ current_user.name }}!</h3>
-                {% if current_user.role_id ==1 %}
-                <a href="{{url_for('main.manage_users')}}">Spravovať użívateľov</a>
-                {% endif %}
-            {% else %}
-            <a href="{{url_for('main.login')}}">Prihlásiť sa</a>
-            <a href="{{url_for('main.register')}}">Registrovať sa</a>
+  </head>
+  <body class="bg-secondary font-sans text-gray-900 flex flex-col min-h-screen m-0">
+    <!-- Header -->
+    <header class="bg-secondary text-white py-2 shadow-lg border-b-2 border-b-white">
+      <nav class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+        <div>
+          <a href="{{url_for('main.home')}}" class="text-5xl font-medium">Chatabook</a>
+        </div>
+        {% if current_user.is_authenticated %}
+        <div class="border-white text-center px-4 border-x-0 sm:border-y-0 sm:border-x-2 border-y-2 sm:flex sm:flex-row sm:items-center">
+          <span class="text-lg text-center">
+            Ahoj, {{ current_user.name }}! Tvoja rola je {{ role_translations[current_user.role.name].name }}.
+            <br>
+            {{ role_translations[current_user.role.name].rights }}
+          </span>
+  
+        </div>
+        <div class="flex flex-wrap gap-4 justify-center items-center">
+          
+            <a href="{{url_for('main.logout')}}" class="text-lg sm:text-xl border-2 border-white py-1 px-4 rounded-md">Odhlásiť sa</a>
+            {% if current_user.role_id ==1 %}
+              <a href="{{url_for('main.manage_users')}}" class="text-lg sm:text-xl border-2 border-white py-1 px-4 rounded-md text-center">Spravovať užívateľov</a>
+            {% endif %} 
+
+            {% if current_user.role_id in [1, 2] %}
+              <a href="{{url_for('main.booking')}}"
+                class="bg-dark hover:bg-darkBlue text-white text-lg sm:text-xl py-1 px-4 rounded-md shadow-md transition duration-200 transform hover:scale-105 text-center border-2 border-white">
+                Vytvoriť rezerváciu
+              </a>
             {% endif %}
-        </nav>
+          {% else %}
+          <div class="flex flex-wrap gap-4">
+            <a href="{{url_for('main.login')}}" class="text-lg sm:text-xl border-2 border-white py-1 px-4 rounded-md">Prihlásiť sa</a>
+            <a href="{{url_for('main.register')}}" class="text-lg sm:text-xl border-2 border-white py-1 px-4 rounded-md">Registrovať sa</a>
+          </div>
+        </div>
+        {% endif %}
+      </nav>
     </header>
-    <div>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{message}}</div>
-                {% endfor %}
-            </div>
-            {% endif %}
-        {% endwith %}
+
+    <!-- Flash Messages -->
+    <div class="container mx-auto py-6">
+      
+     
+      {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+      <div class="space-y-2">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} bg-dark text-white px-4 py-1 rounded shadow">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
     </div>
 
-    <main>
-        {% block content %}
-        {% if current_user.is_authenticated %}
-            {% if current_user.role_id == 1 %}
-                <p>Ahoj, {{ current_user.name }}, tvoja rola je Admin! Máš plný prístup na správu užívateľov, rezervácií a zobrazenie všetkých rezervácií.</p>
-            {% elif current_user.role_id == 2 %}
-                <p>Ahoj, {{ current_user.name }}, tvoja rola je Užívateľ! Môžeš vytvárať, upravovať a mazať svoje vlastné rezervácie, a zobraziť všetky existujúce rezervácie.</p>
-            {% elif current_user.role_id == 3 %}
-                <p>Ahoj, {{ current_user.name }}, tvoja rola je Hosť! Máš právo len na zobrazenie existujúcich rezervácií.</p>
-            {% else %}
-                <p>Ahoj, {{ current_user.name }}, tvoja rola je Návštevník! Máš len obmedzený prístup.</p>
-            {% endif %}
-        {% else %}
-            <p>Prosím, prihláste sa, aby ste mohli zobraziť obsah.</p>
-        {% endif %}
-    {% endblock %}
+    <!-- Main Content -->
+    <main class="container mx-auto flex-1">
+      
+      {% block content %}{% endblock %}
+
     </main>
 
-    <footer>
+    <!-- Footer -->
+    <footer class="bg-secondary text-white text-center py-4 mt-6 shadow-lg border-2 border-white">
+      <p>© 2024 Chatabook | Váš rodinný rezervačný systém.</p>
     </footer>
-</body>
+  </body>
 </html>

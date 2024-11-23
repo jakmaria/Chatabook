@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, request, abort,current_app
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app.utils import role_required
@@ -6,8 +6,13 @@ from .models import db, User, Booking, EventType, Role
 from datetime import datetime, date, timedelta
 import json
 
+#this file was implemented with big help of ChatGPT
 # Define a blueprint for routes, keeping everything modular
 bp = Blueprint('main', __name__)
+
+@bp.app_errorhandler(403)
+def forbidden_error(error):
+    return render_template('403.html'), 403
 
 @bp.route('/')
 def home():
@@ -21,8 +26,8 @@ def home():
         {
             "title": f"{booking.event_type.name} ({booking.user.name})",
             "start": booking.date_from.strftime("%Y-%m-%d"),
-            "end": (booking.date_to + timedelta(days=1)).strftime("%Y-%m-%d"),  # FullCalendar excludes the end date
-            "color": "#FFD700" if booking.whole_cottage else "#87CEEB"  # Optional: Color coding
+            "end": (booking.date_to + timedelta(days=1)).strftime("%Y-%m-%d"),  
+            "color": "#FFD700" if booking.whole_cottage else "#87CEEB"  
         }
         for booking in bookings
     ]
@@ -56,8 +61,6 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
-        print(f"Attempting login with email: {email}, password: {password}")
 
         user = User.query.filter_by(email=email).first()
 
@@ -182,6 +185,7 @@ def edit_user(user_id):
 
     return render_template('edit_user.html', user=user, roles=roles)
 
+ 
 @bp.route('/delete-user/<int:user_id>', methods=['POST'])
 @role_required(1)  
 def delete_user(user_id):

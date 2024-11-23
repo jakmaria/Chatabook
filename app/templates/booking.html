@@ -3,45 +3,98 @@
 {% block title %}Create Booking - Chatabook{% endblock %}
 
 {% block content %}
-<h1>Vytvoriť rezerváciu</h1>
-<form method="POST" action="{{ url_for('main.booking') }}">
-    {% if current_user.role_id == 1 %}
-    <label for="user_id">Užívateľ:</label>
-    <select id="user_id" name="user_id">
-        {% for user in users %}
-        <option value="{{ user.id }}" {% if user.id == current_user.id %}selected{% endif %}>
-            {{ user.name }} {{ user.surname }}
-        </option>
-        {% endfor %}
-    </select>
-    {% endif %}
-    
-    <label for="date_from">Od:</label>
-    <input type="text" id="date_from" name="date_from" required>
+<div class="bg-white shadow-lg rounded-lg p-8 mx-auto max-w-3xl mt-10">
+    <h1 class="text-2xl font-medium text-[#659287] text-center mb-6">📅 Vytvoriť rezerváciu</h1>
+    <form method="POST" action="{{ url_for('main.booking') }}" id="bookingForm" class="space-y-6">
+        {% if current_user.role_id == 1 %}
+        <div>
+            <label for="user_id" class="block text-sm font-medium text-gray-700">Užívateľ:</label>
+            <select
+                id="user_id"
+                name="user_id"
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+                required
+            >
+                {% for user in users %}
+                <option value="{{ user.id }}" {% if user.id == current_user.id %}selected{% endif %}>
+                    {{ user.name }} {{ user.surname }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
 
-    <label for="date_to">Do:</label>
-    <input type="text" id="date_to" name="date_to" required>
+        <div>
+            <label for="date_from" class="block text-sm font-medium text-gray-700">Od:</label>
+            <input
+                type="text"
+                id="date_from"
+                name="date_from"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="date_to" class="block text-sm font-medium text-gray-700">Do:</label>
+            <input
+                type="text"
+                id="date_to"
+                name="date_to"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="event_type_id" class="block text-sm font-medium text-gray-700">Udalosť:</label>
+            <select
+            required
+                id="event_type_id"
+                name="event_type_id"
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            >
+                {% for event in event_types %}
+                <option value="{{ event.id }}">{{ event.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button
+            
+            id="submitButton"
+            type="submit"
+            class="w-full  bg-dark hover:bg-light text-white py-2 px-4 rounded-lg font-bold transition"
+            disabled
+        >
+            Rezervovať
+        </button>
+    </form>
+</div>
 
-    <label for="event_type_id">Udalosť:</label>
-    <select id="event_type_id" name="event_type_id">
-        {% for event in event_types %}
-            <option value="{{ event.id }}">{{ event.name }}</option>
-        {% endfor %}
-    </select>
-
-    <button type="submit">Rezervovať</button>
-</form>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         flatpickr("#date_from", {
-            dateFormat: "Y-m-d", 
+            dateFormat: "Y-m-d",
             minDate: "today"
         });
         flatpickr("#date_to", {
-            dateFormat: "Y-m-d", 
+            dateFormat: "Y-m-d",
             minDate: "today"
+        });
+
+        const form = document.getElementById("bookingForm");
+        const submitButton = document.getElementById("submitButton");
+
+        form.addEventListener("input", () => {
+            const isFormValid = form.checkValidity();
+            if (isFormValid) {
+                submitButton.disabled = false;
+                submitButton.classList.remove("bg-gray-400", "cursor-not-allowed");
+                submitButton.classList.add("bg-dark", "hover:bg-light");
+            } else {
+                submitButton.disabled = true;
+                submitButton.classList.add("bg-gray-400", "cursor-not-allowed");
+                submitButton.classList.remove("bg-dark", "hover:bg-light");
+            }
         });
     });
 </script>
-
 {% endblock %}

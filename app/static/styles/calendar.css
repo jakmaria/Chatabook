@@ -1,0 +1,72 @@
+/* General FullCalendar Styles */
+.fc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    max-height: 550px;
+  }
+  
+  /* Toolbar */
+  .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #727459;
+  }
+  
+  .fc-button {
+    background-color: #B1C29E;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+  }
+  
+  .fc-button:hover {
+    background-color: #727459;
+  }
+  
+  /* Day Cells */
+  .fc-daygrid-day {
+    padding: 5px;
+    font-size: 12px;
+    max-height:fit-content;
+  }
+  
+  .fc-daygrid-day-number {
+    font-weight: bold;
+    color:   #406789;
+    font-size: 0.8rem;
+  }
+  
+  /* .fc-day-today {
+    background-color:  #CDD8DA;
+    border-radius: 8px;
+  } */
+
+  a.fc-event {
+    background-color: unset !important;
+    border-color: unset !important;
+    padding: 2px;
+  }
+  
+  /* Events */
+  .fc-event {
+    background-color: #727459;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 2px 4px;
+    border-color: #727459;
+  }
+  
+  .fc-event:hover {
+    background-color: #B1C29E;
+  }
+
+  .fc .fc-daygrid-day.fc-day-today{
+    background-color:  #CDD8DA;
+  }
+
+
+
+  

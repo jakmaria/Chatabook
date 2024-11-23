@@ -92,6 +92,7 @@ Chatabook leverages modern web development technologies:
 ### Frontend:
 - Designed with Flask's templating engine and a focus on responsive design for usability.
 - Utilizes FullCalendar.js for calendar functionality and Flatpickr.js for date selection.
+- Styled with Tailwind CSS, enabling a clean, responsive design.
 
 ### Backend:
 - Built with Flask, leveraging its modular blueprint system for route management.

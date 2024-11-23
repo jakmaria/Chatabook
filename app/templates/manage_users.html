@@ -3,35 +3,35 @@
 {% block title %}Manage Users - Chatabook{% endblock %}
 
 {% block content %}
-<h1>Správa užívateľov</h1>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Meno</th>
-            <th>E-mail</th>
-            <th>Telefónne číslo</th>
-            <th>Rola</th>
-            <th>Spravovať</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="bg-white shadow-lg rounded-lg p-8 mx-auto max-w-4xl mt-10">
+    <h1 class="text-2xl font-medium text-green-800 text-center mb-6">Správa užívateľov</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }} {{ user.surname }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.phone_number }}</td>
-            <td>{{ user.role.name }}</td>
-            <td>
-                <a href="{{ url_for('main.edit_user', user_id=user.id) }}">Edit</a>
-                <form action="{{ url_for('main.delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Ste si istý, že chcete vymazať uživateľa {{ user.name }} {{ user.surname }}?')">Vymazať</button>
+        <div class="bg-light bg-opacity-80 p-6 rounded-lg shadow-xl">
+            <h2 class="text-lg font-bold text-gray-800">{{ user.name }} {{ user.surname }}</h2>
+            <p class="text-sm text-gray-600"><strong>E-mail:</strong> {{ user.email }}</p>
+            <p class="text-sm text-gray-600"><strong>Telefón:</strong> {{ user.phone_number }}</p>
+            <p class="text-sm text-gray-600"><strong>Rola:</strong>  {{ role_translations[user.role.name].name }}</p>
+            <div class="mt-4 flex space-x-3">
+                <a href="{{ url_for('main.edit_user', user_id=user.id) }}" 
+                   class="bg-dark hover:bg-secondary text-white text-sm font-medium py-2 px-4 rounded-lg">
+                    Upraviť
+                </a>
+                <form action="{{ url_for('main.delete_user', user_id=user.id) }}" method="POST">
+                    <button type="submit" onclick="return confirm('Ste si istý, že chcete vymazať uživateľa {{ user.name }} {{ user.surname }}?')" 
+                            class="bg-[#A04747] hover:bg-red-400 text-white text-sm font-medium py-2 px-4 rounded-lg">
+                        Vymazať
+                    </button>
                 </form>
-            </td>
-        </tr>
+            </div>
+        </div>
         {% endfor %}
-    </tbody>
-</table>
-<a href="{{ url_for('main.home') }}">Back to Home</a>
+    </div>
+    <div class="mt-6 text-center">
+        <a href="{{ url_for('main.home') }}" 
+           class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition">
+            Späť na domov
+        </a>
+    </div>
+</div>
 {% endblock %}

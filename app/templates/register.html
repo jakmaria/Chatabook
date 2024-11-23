@@ -3,23 +3,65 @@
 {% block title %}Register - Chatabook{% endblock %}
 
 {% block content %}
-
-<form method="POST" action="{{url_for('main.register')}}">
-    <label for="name">Meno:</label>
-    <input type="text" id="name" name="name" required>
-
-    <label for="surname">Priezvisko:</label>
-    <input type="text" id="surname" name="surname" required>
-
-    <label for="email">E-mail:</label>
-    <input type="text" id="email" name="email" required>
-
-    <label for="phone_number">Telefónne číslo:</label>
-    <input type="text" id="phone_number" name="phone_number" required>
-
-    <label for="password">Heslo:</label>
-    <input type="password" id="password" name="password" required>
-
-    <button type="submit">Registrovať</button>
-</form>
+<div class="bg-white shadow-lg rounded-lg p-8 mx-auto max-w-lg mt-10">
+    <h1 class="text-2xl font-bold text-green-800 text-center mb-6">Registrácia</h1>
+    <form method="POST" action="{{url_for('main.register')}}" class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Meno:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="surname" class="block text-sm font-medium text-gray-700">Priezvisko:</label>
+            <input
+                type="text"
+                id="surname"
+                name="surname"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">E-mail:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="phone_number" class="block text-sm font-medium text-gray-700">Telefónne číslo:</label>
+            <input
+                type="text"
+                id="phone_number"
+                name="phone_number"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Heslo:</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
+        <button
+            type="submit"
+            class="w-full bg-dark hover:bg-light text-white py-2 px-4 rounded-lg font-bold transition"
+        >
+            Registrovať
+        </button>
+    </form>
+</div>
 {% endblock %}

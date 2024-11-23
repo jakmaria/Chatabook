@@ -3,60 +3,75 @@
 {% block title %}Home - Chatabook{% endblock %}
 
 {% block content %}
-<h1>Vitajte na Chatabookingu!</h1>
-<p>Náš rodinný rezervačný systém.</p>
-<a href="{{url_for('main.booking')}}">Vytvoriť rezerváciu</a>
 
-<h2>Obsadenosť</h2>
-<div id="calendar"></div>
+{% if current_user.is_authenticated %}
+      
 
-<h2>Budúce udalosti</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Od</th>
-            <th>Do</th>
-            <th>Udalosť</th>
-            <th>Rezervované užívateľom</th>
-            <th>Kontakt</th>
-            <th>Poznámka</th>
-        </tr> 
-    </thead>
-    <tbody>
-        {% for booking in bookings %}
-        <tr>
-            <td>{{ booking.date_from.strftime("%d.%m.%Y") if booking.date_from else "N/A" }}</td>
-            <td>{{ booking.date_to.strftime("%d.%m.%Y") if booking.date_to else "N/A" }}</td>
-            <td>{{ booking.event_type.name }}</td>
-            <td>{{ booking.user.name }}</td>
-            <td>{{ booking.user.phone_number }}</td>
-            <td>{{ booking.comment or "" }}</td>
-            <td>
-                {% if booking.user.id == current_user.id or current_user.role_id == 1 %}
-                <a href="{{ url_for('main.edit_booking', booking_id=booking.id) }}">Upraviť</a>
-                <form action="{{ url_for('main.delete_booking', booking_id=booking.id) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Zmazať</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% if current_user.role_id in [1, 2,3]%}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-medium text-primary mb-4">📅 Obsadenosť</h2>
+    <div id="calendar"></div>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow-lg overflow-y-auto h-[600px] min-h-full min-w-full">
+    <h2 class="text-2xl font-medium text-primary mb-4">📝 Budúce udalosti</h2>
+    <div class="space-y-6">
+      {% for booking in bookings %}
+      <div class="bg-white p-6 rounded-lg shadow-xl ">
+        <h3 class="text-xl font-semibold text-primary mb-2">🌿 {{ booking.event_type.name }}</h3>
+        <p class="text-gray-600 text-lg"><strong>Od:</strong> {{ booking.date_from.strftime("%d.%m.%Y") if booking.date_from else "N/A" }}</p>
+        <p class="text-gray-600 text-lg"><strong>Do:</strong> {{ booking.date_to.strftime("%d.%m.%Y") if booking.date_to else "N/A" }}</p>
+        <p class="text-gray-600 text-lg"><strong>Rezervované užívateľom:</strong> {{ booking.user.name }}</p>
+        <p class="text-gray-600 text-lg"><strong>Kontakt:</strong> {{ booking.user.phone_number }}</p>
+        <p class="text-gray-600 text-lg"><strong>Poznámka:</strong> {{ booking.comment or "—" }}</p>
+        {% if booking.user.id == current_user.id or current_user.role_id == 1 %}
+        <div class="mt-4 flex space-x-3">
+          <a href="{{ url_for('main.edit_booking', booking_id=booking.id) }}" 
+             class="bg-secondary hover:bg-dark text-white text-lg font-medium py-2 px-4 rounded-lg">
+            Upraviť
+          </a>
+          <form action="{{ url_for('main.delete_booking', booking_id=booking.id) }}" method="POST">
+            <button type="submit" onclick="return confirm('Ste si istí, že chcete vymazať túto rezerváciu?')" 
+                    class="bg-[#A04747] hover:bg-red-400 text-white text-lg font-medium py-2 px-4 rounded-lg">
+              Zmazať
+            </button>
+          </form>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
-        const calendarEl = document.getElementById('calendar');
+  document.addEventListener("DOMContentLoaded", function () {
+  const calendarEl = document.getElementById("calendar");
 
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: JSON.parse('{{ events|tojson|safe }}'),
-        });
-        calendar.render();
-    });
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: "dayGridMonth",
+    headerToolbar: {
+      left: "prev,next today",
+      center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay",
+    },
+    locale: "sk",
+    events: JSON.parse('{{ events|tojson|safe }}'),
+    dayCellDidMount: function (info) {
+      info.el.style.padding = "5px"; 
+    },
+    eventContent: function (info) {
+      return {
+        html: `<div style="font-size: 1rem; font-weight: 500; padding: 6px; background: #406789; color: white; border-radius: 4px;">
+                  ${info.event.title}
+               </div>`,
+      };
+    },
+  });
+  calendar.render();
+});
 </script>
 {% endblock %}

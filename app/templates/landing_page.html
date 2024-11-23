@@ -1,30 +1,29 @@
-<!-- templates/landing_page.html -->
 {% extends "layout.html" %}
 
 {% block title %}Chatabook - Domov{% endblock %}
 
 {% block content %}
-<div >
-    <h1>Vitajte na Chatabook!</h1>
-    <p>
-        Chatabook je jednoduchý rezervačný systém pre našu rodinnú chatu. 
-        Tento systém umožňuje:
-    </p>
-    <ul>
-        <li>Rýchlu rezerváciu termínov.</li>
-        <li>Zobrazenie obsadenosti chaty v kalendári.</li>
-        <li>Správu rezervácií pre užívateľov a adminov.</li>
-        <li>Transparentnú a organizovanú komunikáciu medzi členmi rodiny.</li>
-    </ul>
+<div class="bg-white shadow-lg rounded-lg p-8 mx-auto max-w-3xl mt-10">
+  <h1 class="text-3xl font-bold text-darkBlue text-center mb-6">Vitajte na Chatabook!</h1>
+  <p class="text-gray-700 text-center mb-6">
+    Chatabook je jednoduchý rezervačný systém pre našu rodinnú chatu. Tento systém umožňuje:
+  </p>
+  <ul class="list-disc list-inside text-gray-800 space-y-2 mb-6">
+    <li>🍂 Rýchlu rezerváciu termínov.</li>
+    <li>📅 Zobrazenie obsadenosti chaty v kalendári.</li>
+    <li>🛠️ Správu rezervácií pre užívateľov a adminov.</li>
+    <!-- <li>🌼 Transparentnú a organizovanú komunikáciu medzi členmi rodiny.</li> -->
+  </ul>
 
-    <h2>Čo ponúkame?</h2>
-    <p>
-        Systém je navrhnutý tak, aby zjednodušil správu rezervácií a poskytol prehľad o aktuálnom stave obsadenosti chaty.
-    </p>
-    <h2>Začnite teraz!</h2>
-    <div>
-        <a href="{{ url_for('main.register') }}" >Registrovať sa</a>
-        <a href="{{ url_for('main.login') }}" >Prihlásiť sa</a>
-    </div>
+  <h2 class="text-2xl font-semibold text-darkBlue mb-3">Čo ponúkame?</h2>
+  <p class="text-gray-700 mb-6">
+    Systém je navrhnutý tak, aby zjednodušil správu rezervácií a poskytol prehľad o aktuálnom stave obsadenosti chaty.
+  </p>
+
+  <h2 class="text-xl font-semibold text-darkBlue mb-4 text-center">Začnite teraz!</h2>
+  <div class="flex justify-center space-x-4">
+    <a href="{{ url_for('main.register') }}" class="  bg-secondary hover:bg-light  text-white font-bold py-2 px-6 rounded-lg shadow-md transition">Registrovať sa</a>
+    <a href="{{ url_for('main.login') }}" class="bg-dark hover:bg-light  text-white font-bold py-2 px-6 rounded-lg shadow-md transition">Prihlásiť sa</a>
+  </div>
 </div>
 {% endblock %}

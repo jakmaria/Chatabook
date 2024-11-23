@@ -3,38 +3,81 @@
 {% block title %}Edit Booking - Chatabook{% endblock %}
 
 {% block content %}
-<h1>Upraviť rezerváciu</h1>
-<form method="POST" action="{{ url_for('main.edit_booking', booking_id=booking.id) }}">
-    <label for="date_from">Od:</label>
-    <input type="text" id="date_from" name="date_from" value="{{ booking.date_from.strftime('%Y-%m-%d') }}" required>
+<div class="bg-white shadow-lg rounded-lg p-8 mx-auto max-w-3xl mt-10">
+    <h1 class="text-2xl font-bold text-green-800 text-center mb-6">✏️ Upraviť rezerváciu</h1>
+    <form method="POST" action="{{ url_for('main.edit_booking', booking_id=booking.id) }}" class="space-y-6">
+        <div>
+            <label for="date_from" class="block text-sm font-medium text-gray-700">Od:</label>
+            <input
+                type="text"
+                id="date_from"
+                name="date_from"
+                value="{{ booking.date_from.strftime('%Y-%m-%d') }}"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
 
-    <label for="date_to">Do:</label>
-    <input type="text" id="date_to" name="date_to" value="{{ booking.date_to.strftime('%Y-%m-%d') }}" required>
+        <div>
+            <label for="date_to" class="block text-sm font-medium text-gray-700">Do:</label>
+            <input
+                type="text"
+                id="date_to"
+                name="date_to"
+                value="{{ booking.date_to.strftime('%Y-%m-%d') }}"
+                required
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            />
+        </div>
 
-    <label for="event_type_id">Udalosť:</label>
-    <select id="event_type_id" name="event_type_id">
-        {% for event in event_types %}
-            <option value="{{ event.id }}" {% if event.id == booking.event_type_id %}selected{% endif %}>
-                {{ event.name }}
-            </option>
-        {% endfor %}
-    </select>
+        <div>
+            <label for="event_type_id" class="block text-sm font-medium text-gray-700">Udalosť:</label>
+            <select
+                id="event_type_id"
+                name="event_type_id"
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            >
+                {% for event in event_types %}
+                <option value="{{ event.id }}" {% if event.id == booking.event_type_id %}selected{% endif %}>
+                    {{ event.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <label for="comment">Poznámka:</label>
-    <textarea id="comment" name="comment">{{ booking.comment or '' }}</textarea>
+        <div>
+            <label for="comment" class="block text-sm font-medium text-gray-700">Poznámka:</label>
+            <textarea
+                id="comment"
+                name="comment"
+                rows="3"
+                class="w-full mt-1 p-2 border rounded focus:ring-green-500 focus:border-green-500"
+            >{{ booking.comment or '' }}</textarea>
+        </div>
 
-    <button type="submit">Uložiť zmeny</button>
-</form>
+        <div class="flex justify-between items-center">
+            <button
+                type="submit"
+                class="bg-secondary hover:bg-dark text-white py-2 px-4 rounded-lg font-bold transition"
+            >
+                Uložiť zmeny
+            </button>
+            <a href="{{ url_for('main.home') }}" class="bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition">
+                Zrušiť
+            </a>
+        </div>
+    </form>
+</div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         flatpickr("#date_from", {
             dateFormat: "Y-m-d",
-            defaultDate: "{{ booking.date_from.strftime('%Y-%m-%d') }}"
+            defaultDate: "{{ booking.date_from.strftime('%Y-%m-%d') }}",
         });
         flatpickr("#date_to", {
             dateFormat: "Y-m-d",
-            defaultDate: "{{ booking.date_to.strftime('%Y-%m-%d') }}"
+            defaultDate: "{{ booking.date_to.strftime('%Y-%m-%d') }}",
         });
     });
 </script>
