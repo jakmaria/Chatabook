@@ -1,6 +1,6 @@
 # Chatabook - Family Cottage Reservation System
 
-#### Video Demo:
+#### Video Demo: https://www.canva.com/design/DAGXVkKRmnc/Uv7HV2NJSfGhn6HInQcNnQ/watch?utm_content=DAGXVkKRmnc&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
 #### Description:
 **Chatabook** is a web-based reservation system designed to simplify the management of a shared family cottage.
